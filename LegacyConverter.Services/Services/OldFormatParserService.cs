@@ -20,6 +20,7 @@ namespace LegacyConverter.Services.Services
             }
 
 			// Since we have a legacy service, these values are VERY unlikely to change
+			// If we want to fail on invalid values then we should make a separate method for each property
 			var formatPartActions = new [] {
 				Tuple.Create(1, new Action<DataItemDto, string>((item, val) => item.IsActive = val == "A")),
 				Tuple.Create(20, new Action<DataItemDto, string>((item, val) => item.PhoneNumber = val.Trim())),
@@ -49,6 +50,10 @@ namespace LegacyConverter.Services.Services
 
 				return dataItem;
 			} catch (Exception e) {
+				if (e is FormatParserException) {
+					throw;
+				}
+
 				throw new FormatParserException("An error has occured", e);
 			}
 		}

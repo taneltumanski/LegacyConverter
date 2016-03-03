@@ -44,6 +44,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Castle.Core.3.3.0\lib\net45\Castle.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Castle.Windsor, Version=3.3.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Castle.Windsor.3.3.0\lib\net45\Castle.Windsor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
@@ -130,9 +138,12 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="CastleWindsor\Installers\ControllersInstaller.cs" />
+    <Compile Include="CastleWindsor\Installers\ServiceInstaller.cs" />
+    <Compile Include="CastleWindsor\WindsorCompositionRoot.cs" />
+    <Compile Include="CastleWindsor\WindsorControllerFactory.cs" />
     <Compile Include="Controllers\Api\ModernDataController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -196,6 +207,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LegacyConverter.Core\LegacyConverter.Core.csproj">
+      <Project>{2be7f7ee-3022-4db6-a624-2f9cd3fea466}</Project>
+      <Name>LegacyConverter.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LegacyConverter.Services\LegacyConverter.Services.csproj">
+      <Project>{9e3df324-1cf5-4455-a6c4-a79107fcbb7c}</Project>
+      <Name>LegacyConverter.Services</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

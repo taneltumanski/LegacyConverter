@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace LegacyConverter.Core.Interfaces.Services
 {
-	public interface IApplicationService
+	public interface ILegacyRequestService
 	{
+		Task<string> Request(string apiEndpoint, string dataFile);
 	}
 }
