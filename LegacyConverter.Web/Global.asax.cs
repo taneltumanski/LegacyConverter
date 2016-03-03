@@ -1,7 +1,9 @@
 ﻿using Castle.Windsor;
 using Castle.Windsor.Installer;
+using LegacyConverter.Core;
 using LegacyConverter.Services.Services;
 using LegacyConverter.Web.CastleWindsor;
+using LegacyConverter.Web.CastleWindsor.Installers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,13 +29,19 @@ namespace LegacyConverter.Web
 			BundleConfig.RegisterBundles(BundleTable.Bundles);
 
 			this.Container = new WindsorContainer()
-				.Install(FromAssembly.This());
+				.Install(FromAssembly.This(), new ServiceInstaller());
 
+			var dependencyResolver = new WindsorDependencyResolver(this.Container);
+            GlobalConfiguration.Configuration.DependencyResolver = dependencyResolver;
+
+			ControllerBuilder.Current.SetControllerFactory(new WindsorControllerFactory(this.Container.Kernel));
 			GlobalConfiguration.Configuration.Services.Replace(typeof(IHttpControllerActivator), new WindsorCompositionRoot(this.Container));
 		}
 
 		public override void Dispose()
 		{
+			this.Container.Dispose();
+
 			base.Dispose();
 		}
 	}

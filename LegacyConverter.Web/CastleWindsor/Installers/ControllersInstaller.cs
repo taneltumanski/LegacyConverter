@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Http;
 using System.Web.Mvc;
 
 namespace LegacyConverter.Web.CastleWindsor.Installers
@@ -13,10 +14,16 @@ namespace LegacyConverter.Web.CastleWindsor.Installers
 	{
 		public void Install(IWindsorContainer container, IConfigurationStore store)
 		{
-			container.Register(Classes
-				.FromThisAssembly()
-				.BasedOn<IController>()
-				.LifestyleTransient());
+			container.Register(
+				Classes
+					.FromThisAssembly()
+					.BasedOn<IController>()
+					.LifestyleTransient(),
+
+				Classes
+					.FromThisAssembly()
+					.BasedOn<ApiController>()
+					.LifestyleTransient());
 		}
 	}
 }
