@@ -13,16 +13,11 @@ namespace LegacyConverter.Web.Controllers.Api
 {
     public class ModernDataController : ApiController
     {
-		public IDataItemBufferService DataItemBufferService { get; set; }
-		public ILegacyRequestService RequestService { get; set; }
-		public IOldFormatParserService ParserService { get; set; }
+		public IDataItemService DataItemService { get; set; }
 
-		public IConfig Config { get; set; }
-
-		public async Task<DataItemDto> Get()
+		public DataItemDto Get()
 		{
-			var data = await RequestService.Request(Config.ApiData.ApiEndpoint, "data_1.txt");
-			var item = ParserService.ParseOldFormat(data);
+			var item = DataItemService.GetCurrentDataItem();
 
 			return item;
 		}

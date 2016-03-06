@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace LegacyConverter.Core.Interfaces.Services
 {
-	public interface IDataItemBufferService : IApplicationService
+	public interface IDataItemService : IApplicationService
 	{
-		void AddDataItem(DataItemDto dataItem);
-		DataItemDto GetDataItem();
+		DataItemDto GetCurrentDataItem();
+		DataItemDto RequestDataItem(string fileName);
 	}
 }

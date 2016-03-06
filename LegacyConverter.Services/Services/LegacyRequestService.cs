@@ -1,4 +1,5 @@
-﻿using LegacyConverter.Core.Interfaces.Services;
+﻿using LegacyConverter.Core;
+using LegacyConverter.Core.Interfaces.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +11,24 @@ namespace LegacyConverter.Services.Services
 {
 	public class LegacyRequestService : ILegacyRequestService
 	{
-		public Task<string> Request(string apiEndpoint, string dataFile)
+		public IConfig Config { get; set; }
+
+		public string Request(string fileName)
 		{
-			var address = new Uri(new Uri(apiEndpoint), dataFile);
+			var address = new Uri(new Uri(Config.ApiData.ApiEndpoint), fileName);
 
 			using (var wc = new WebClient()) {
-				return wc.DownloadStringTaskAsync(address);
+				try {
+					return wc.DownloadString(address);
+				} catch (WebException e ) {
+					var response = e.Response as HttpWebResponse;
+
+					if (response.StatusCode == HttpStatusCode.NotFound) {
+						return null;
+					}
+
+					throw;
+				}
 			}
 		}
 	}
