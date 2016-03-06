@@ -74,6 +74,7 @@ namespace LegacyConverter.Services.Services
 				part.Item2(dataItem, formatPart);
 			}
 
+			// Filter out empty clients
 			dataItem.Clients = dataItem.Clients
 				.Where(x => !string.IsNullOrWhiteSpace(x.Name) && !string.IsNullOrWhiteSpace(x.PhoneNumber))
 				.ToList()
@@ -82,6 +83,12 @@ namespace LegacyConverter.Services.Services
 			return dataItem;
 		}
 
+		/// <summary>
+		/// Cut the data into equal parts
+		/// </summary>
+		/// <param name="format">Data</param>
+		/// <param name="partSize">Part size</param>
+		/// <returns>Data cut into parts</returns>
 		private IEnumerable<string> GetFormatParts(string format, int partSize)
 		{
 			var partCount = format.Length / partSize;
@@ -90,6 +97,12 @@ namespace LegacyConverter.Services.Services
 			return GetFormatParts(format, partLengths);
 		}
 
+		/// <summary>
+		/// Cut the data into different sized parts
+		/// </summary>
+		/// <param name="format">Data</param>
+		/// <param name="formatPartsLengths">Part sizes</param>
+		/// <returns>Data cut into parts</returns>
 		private IEnumerable<string> GetFormatParts(string format, IEnumerable<int> formatPartsLengths)
 		{
 			int currentStartIndex = 0;

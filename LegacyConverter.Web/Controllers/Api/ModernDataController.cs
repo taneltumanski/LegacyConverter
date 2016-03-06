@@ -11,15 +11,30 @@ using System.Web.Http;
 
 namespace LegacyConverter.Web.Controllers.Api
 {
+	/// <summary>
+	/// Simple service that gets periodical data from the legacy service
+	/// </summary>
     public class ModernDataController : ApiController
     {
 		public IDataItemService DataItemService { get; set; }
 
+		/// <summary>
+		/// Gets the currently buffered legacy data 
+		/// </summary>
+		/// <returns>Legacy data</returns>
 		public DataItemDto Get()
 		{
-			var item = DataItemService.GetCurrentDataItem();
+			return DataItemService.GetCurrentDataItem();
+		}
 
-			return item;
+		/// <summary>
+		/// Gets a legacy data object based on the sequence id
+		/// </summary>
+		/// <param name="id">Legacy object id</param>
+		/// <returns>Legacy object</returns>
+		public DataItemDto Get(int id)
+		{
+			return DataItemService.RequestDataItem(id);
 		}
 	}
 }

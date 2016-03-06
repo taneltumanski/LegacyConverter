@@ -18,6 +18,10 @@ namespace LegacyConverter.Web.Controllers
 			return View();
 		}
 
+		/// <summary>
+		/// Create the partial view for the currently buffered legacy object
+		/// </summary>
+		/// <returns>View for current legacy object</returns>
 		public virtual PartialViewResult ModernDataView()
 		{
 			var item = DataItemService.GetCurrentDataItem();

@@ -54,44 +54,33 @@ namespace LegacyConverter.Services.Services
 			return item.Item;
 		}
 
-		private int CalculateFileIndex(int fileIndex, DateTime requestTime)
+		public DataItemDto RequestDataItem(int fileIndex)
 		{
-			TimeSpan passedTime;
+			var fileName = string.Format(Config.RequestConfig.FileFormat, fileIndex);
 
-			if (requestTime == DateTime.MinValue) {
-				passedTime = TimeSpan.Zero;
-			} else {
-				passedTime = DateTime.UtcNow.Subtract(requestTime);
-			}
-
-			// Calculate the current file index based on the last file index and passed time
-			var wouldBeFileIndex = passedTime.TotalSeconds / Config.RequestConfig.DataBufferSeconds;
-			var currentFileIndex = fileIndex + (int)(wouldBeFileIndex % Config.RequestConfig.MaxFileIndex);
-
-			if (currentFileIndex > Config.RequestConfig.MaxFileIndex) {
-				currentFileIndex = Config.RequestConfig.MinFileIndex;
-			}
-
-			return currentFileIndex;
+			return RequestDataItem(fileName, fileIndex);
 		}
 
-		public DataItemDto RequestDataItem(string fileName)
+		private DataItemDto RequestDataItem(string fileName, int fileIndex)
 		{
 			var dataItemData = RequestService.Request(fileName);
 
+			DataItemDto dataItem;
+
 			if (dataItemData == null) {
-				return null;
+				dataItem = new DataItemDto();
+			} else {
+				dataItem = ParserService.ParseOldFormat(dataItemData);
 			}
 
-			var dataItem = ParserService.ParseOldFormat(dataItemData);
+			dataItem.SequenceId = fileIndex;
 
 			return dataItem;
 		}
 
 		private DataItemBuffer GetDataItemBuffer(int fileIndex)
 		{
-			var fileName = string.Format(Config.RequestConfig.FileFormat, fileIndex);
-			var dataItem = RequestDataItem(fileName);
+			var dataItem = RequestDataItem(fileIndex);
 			var isValid = dataItem != null;
 
 			dataItem = dataItem ?? new DataItemDto();
@@ -106,6 +95,28 @@ namespace LegacyConverter.Services.Services
 			};
 
 			return buffer;
+		}
+
+		private int CalculateFileIndex(int fileIndex, DateTime requestTime)
+		{
+			TimeSpan passedTime;
+
+			if (requestTime == DateTime.MinValue) {
+				passedTime = TimeSpan.Zero;
+			} else {
+				passedTime = DateTime.UtcNow.Subtract(requestTime);
+			}
+
+			// Calculate the current file index based on the last file index and passed time
+			var wouldBeFileIndex = passedTime.TotalSeconds / Config.RequestConfig.DataBufferSeconds;
+			var currentFileIndex = fileIndex + (int)(wouldBeFileIndex % Config.RequestConfig.MaxFileIndex);
+
+			// If we overflow, fall back to the minimum value
+			if (currentFileIndex > Config.RequestConfig.MaxFileIndex) {
+				currentFileIndex = Config.RequestConfig.MinFileIndex;
+			}
+
+			return currentFileIndex;
 		}
 	}
 }
