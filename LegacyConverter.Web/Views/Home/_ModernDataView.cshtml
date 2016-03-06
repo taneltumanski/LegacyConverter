@@ -4,7 +4,7 @@
     <div>No data for sequence id = @Model.SequenceId</div>
 } else {
     <div>
-        <div>Sequence id: @Model.SequenceId</div>
+        <div>Request sequence id: @Model.SequenceId</div>
         <div>Phone: @Model.PhoneNumber</div>
 
         @if (Model.IsActive) {
@@ -17,25 +17,27 @@
                 <div>XL-Service inactive</div>
             }
 
-            <div>Except for</div>
-            <div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Phone</th>
-                            <th>Name</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var c in Model.Clients) {
+            if (Model.IsOverrideListInUse) {
+                <div>Except for</div>
+                <div>
+                    <table class="clientTable">
+                        <thead>
                             <tr>
-                                <td>@c.PhoneNumber</td>
-                                <td>@c.Name</td>
+                                <th>Phone</th>
+                                <th>Name</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody>
+                            @foreach (var c in Model.Clients) {
+                                <tr>
+                                    <td>@c.PhoneNumber</td>
+                                    <td>@c.Name</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
         } else {
             <div>Service inactive</div>
         }

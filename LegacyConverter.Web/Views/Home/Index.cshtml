@@ -3,9 +3,7 @@
 @section scripts {
     <script type="text/javascript">
         $(document).ready(function () {
-            loadModernData();
-
-            setInterval(loadModernData, 2500);
+            loadModernData();  
         })
 
         function loadModernData() {
@@ -13,6 +11,8 @@
 
             $.get(partialUrl, function (result) {
                 $("#modernDataView").html(result);
+
+                setTimeout(loadModernData, 2500);
             });
         }
     </script>
