@@ -1,0 +1,44 @@
+﻿@model LegacyConverter.Core.Dto.DataItemDto
+
+@if (!Model.IsValid) {
+    <div>No data for sequence id = @Model.SequenceId</div>
+} else {
+    <div>
+        <div>Sequence id: @Model.SequenceId</div>
+        <div>Phone: @Model.PhoneNumber</div>
+
+        @if (Model.IsActive) {
+            <div>Language: @Model.Language</div>
+            <div>Service active until: @Model.ServiceEndDateTime</div>
+
+            if (Model.HasXLAdditionalService) {
+                <div>XL-Service active (@Model.XLServiceActivationTime.Value.ToString("hh\\:mm") - @Model.XLServiceEndTime.Value.ToString("hh\\:mm")) in @Model.XLAdditionalServiceLanguage.ToString().ToLowerInvariant() language</div>
+            } else {
+                <div>XL-Service inactive</div>
+            }
+
+            <div>Except for</div>
+            <div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Phone</th>
+                            <th>Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var c in Model.Clients) {
+                            <tr>
+                                <td>@c.PhoneNumber</td>
+                                <td>@c.Name</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        } else {
+            <div>Service inactive</div>
+        }
+    </div>
+}
+

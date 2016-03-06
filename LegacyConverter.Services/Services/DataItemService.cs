@@ -31,6 +31,7 @@ namespace LegacyConverter.Services.Services
 			if (item == null) {
 				item = new DataItemBuffer() {
 					RequestTime = DateTime.MinValue,
+					FileIndex = Config.RequestConfig.MinFileIndex
 				};
 
 				Cache[DATA_ITEM_BUFFER_KEY] = item;
@@ -64,8 +65,8 @@ namespace LegacyConverter.Services.Services
 			}
 
 			// Calculate the current file index based on the last file index and passed time
-			var dividedSeconds = passedTime.TotalSeconds / Config.RequestConfig.DataBufferSeconds;
-			var currentFileIndex = fileIndex + (int)(dividedSeconds % Config.RequestConfig.MaxFileIndex) + Config.RequestConfig.MinFileIndex;
+			var wouldBeFileIndex = passedTime.TotalSeconds / Config.RequestConfig.DataBufferSeconds;
+			var currentFileIndex = fileIndex + (int)(wouldBeFileIndex % Config.RequestConfig.MaxFileIndex);
 
 			if (currentFileIndex > Config.RequestConfig.MaxFileIndex) {
 				currentFileIndex = Config.RequestConfig.MinFileIndex;
@@ -91,6 +92,12 @@ namespace LegacyConverter.Services.Services
 		{
 			var fileName = string.Format(Config.RequestConfig.FileFormat, fileIndex);
 			var dataItem = RequestDataItem(fileName);
+			var isValid = dataItem != null;
+
+			dataItem = dataItem ?? new DataItemDto();
+
+			dataItem.SequenceId = fileIndex;
+			dataItem.IsValid = isValid;
 
 			var buffer = new DataItemBuffer() {
 				Item = dataItem,
