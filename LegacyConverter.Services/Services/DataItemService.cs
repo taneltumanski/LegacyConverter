@@ -71,6 +71,7 @@ namespace LegacyConverter.Services.Services
 				dataItem = new DataItemDto();
 			} else {
 				dataItem = ParserService.ParseOldFormat(dataItemData);
+				dataItem.IsValid = true;
 			}
 
 			dataItem.SequenceId = fileIndex;
@@ -81,12 +82,6 @@ namespace LegacyConverter.Services.Services
 		private DataItemBuffer GetDataItemBuffer(int fileIndex)
 		{
 			var dataItem = RequestDataItem(fileIndex);
-			var isValid = dataItem != null;
-
-			dataItem = dataItem ?? new DataItemDto();
-
-			dataItem.SequenceId = fileIndex;
-			dataItem.IsValid = isValid;
 
 			var buffer = new DataItemBuffer() {
 				Item = dataItem,
