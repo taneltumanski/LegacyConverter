@@ -32,8 +32,8 @@ namespace LegacyConverter.Services.Services
 				Tuple.Create(4, new Action<DataItemDto, string>((item, val) => item.XLServiceActivationTime = string.IsNullOrWhiteSpace(val) ? (TimeSpan?)null : TimeSpan.ParseExact(val, "hhmm", CultureInfo.InvariantCulture, TimeSpanStyles.None))),
 				Tuple.Create(4, new Action<DataItemDto, string>((item, val) => item.XLServiceEndTime = string.IsNullOrWhiteSpace(val) ? (TimeSpan?)null : TimeSpan.ParseExact(val, "hhmm", CultureInfo.InvariantCulture, TimeSpanStyles.None))),
 				Tuple.Create(1, new Action<DataItemDto, string>((item, val) => item.IsOverrideListInUse = val == "K")),
-				Tuple.Create(120, new Action<DataItemDto, string>((item, val) => InsertClientNames(item, val, 15))),
-				Tuple.Create(160, new Action<DataItemDto, string>((item, val) => InsertClientNumbers(item, val, 20)))
+				Tuple.Create(120, new Action<DataItemDto, string>((item, val) => InsertClientNumbers(item, val, 15))),
+				Tuple.Create(160, new Action<DataItemDto, string>((item, val) => InsertClientNames(item, val, 20)))
 			};
 
 			var totalWidth = formatPartActions.Sum(x => x.Item1);
@@ -97,7 +97,7 @@ namespace LegacyConverter.Services.Services
 			foreach (var partLength in formatPartsLengths) {
 				yield return format.Substring(currentStartIndex, partLength);
 
-				currentStartIndex = partLength;
+				currentStartIndex += partLength;
 			}
 		}
 

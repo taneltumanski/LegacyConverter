@@ -18,6 +18,7 @@ namespace LegacyConverter.Web.CastleWindsor.Installers
 				Classes
 					.FromAssemblyContaining<OldFormatParserService>()
 					.BasedOn<IApplicationService>()
+					.WithService.FromInterface()
 					.LifestylePerWebRequest());
 		}
 	}
